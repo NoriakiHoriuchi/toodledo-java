@@ -24,6 +24,7 @@ public class Client {
 	private String email;
 	private String userid; 
 	private String password; 
+	private String appToken;
 	private AuthToken token; 
 	private ToodledoApi tdApi; 
 	
@@ -32,9 +33,10 @@ public class Client {
 	 * @param email E-mail of the user to test.
 	 * @param password 
 	 */
-	public Client(String email, String password) {
+	public Client(String email, String password, String appToken) {
 		this.email = email; 
 		this.password = password; 
+		this.appToken=appToken;
 		tdApi = new ToodledoApiImpl();
 	}
 	
@@ -47,7 +49,7 @@ public class Client {
 	private boolean connect() {
 		try {
 			this.userid = tdApi.getUserId(email, password);
-			this.token = tdApi.initialize(userid, password);
+			this.token = tdApi.initialize(userid, password,appToken);
 		} catch (ToodledoApiException e) {
 			System.out.println("Could not connect to http://www.toodledo.com");
 			e.printStackTrace();
@@ -138,6 +140,7 @@ public class Client {
 	public static void main(String[] args) {
 		String email = null; 
 		String password = null; 
+		String appToken = null; 
 		
 		Console cons = System.console();
 		if (cons == null) {
@@ -159,7 +162,7 @@ public class Client {
 		System.out.print("Toodledo password for "+email+ " (won't be visible): ");
 		password = new String(cons.readPassword());
 		
-		Client c = new Client(email, password);
+		Client c = new Client(email, password, appToken);
 		if (c.connect())
 			c.run();	
 	}

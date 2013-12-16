@@ -85,7 +85,7 @@ public class GetTodosParser extends DefaultHandler {
 		} else if (qName.equalsIgnoreCase("folder")) {
 			tmp_.setFolder(Integer.parseInt(tempVal.toString()));
 		} else if (qName.equalsIgnoreCase("added")) {
-			tmp_.setAdded(new TdDate(tempVal.toString()));
+//			tmp_.setAdded(new TdDate(tempVal.toString()));
 		} else if (qName.equalsIgnoreCase("modified")) {
 			tmp_.setModified(new TdDateTime(tempVal.toString()));
 		} else if (qName.equalsIgnoreCase("startdate")) {

@@ -1,5 +1,7 @@
 package org.loststone.toodledo.data;
 
+import java.lang.reflect.Array;
+
 import org.loststone.toodledo.util.TdDate;
 import org.loststone.toodledo.util.TdDateTime;
 
@@ -10,37 +12,57 @@ import org.loststone.toodledo.util.TdDateTime;
  *
  */
 public class Todo {
+    int id; 
 	String title;
 	String tag; 
 	int folder; // id of the folder, 0 means no folder.
 	int context; // 0 no context
 	int goal; // 0 no goal
-	Priority priority;
-	Repeat repeat;
-	String rep_advanced; 
-	Status status;
+	int location; // 0 if none
 	int parent; // 0 if none
-	int shorter; 
+	int children;
+	int order; //read only.
+	TdDateTime duedate; //A GMT unix timestamp 
+	int duedatemod;
+	TdDateTime startdate;
+	TdDateTime duedatetime;
+	TdDateTime startdatetime;
+	int remind;
+	Repeat repeat;
+	int repeatfrom;
+	Status status;
 	int length; 
+	Priority priority;
+	boolean star; 
+	TdDateTime modified; 
+	TdDateTime completed;
+	TdDateTime added;
+	int timer;
+	TdDateTime timeron;
+	String note; 
+	String meta;
+	int previous;
+	boolean attachment;
+	boolean shared;
+	String sharedowner;
+	String[] sharedwith;
+	String addedby;
+	
+	String rep_advanced; 
+	int shorter; 
 	int longer;
 	TdDate before;
 	TdDate after;
 	TdDate startDate; 
-	
 	TdDate startbefore; 
 	TdDate startafter;
 	TdDateTime modbefore;
 	TdDateTime modafter; 
-	TdDateTime modified; 
 	TdDate compbefore;
 	TdDate compafter; 
-	TdDate added; 
 	boolean notcomp;
-	boolean star; 
-	int id; 
 	int start; 
 	int end;
-	String note; 
 	private boolean hasEnd = false;
 	private boolean hasStart = false;
 	private boolean hasId = false;
@@ -490,7 +512,7 @@ public class Todo {
 		this.hasEnd = true;
 	}
 
-	public void setAdded(TdDate added) {
+	public void setAdded(TdDateTime added) {
 		this.added = added;
 		this.hasAdded = true;
 	}

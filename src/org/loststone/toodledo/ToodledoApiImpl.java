@@ -43,153 +43,168 @@ import org.loststone.toodledo.xml.GetUserIdParser;
 import org.loststone.toodledo.xml.GoalsParser;
 
 public class ToodledoApiImpl implements ToodledoApi {
-
-	public int addTodo(AuthToken auth, Todo todo) throws ToodledoApiException {
-		AddTodoRequest request = new AddTodoRequest(auth, todo);
-		AddTodoResponse resp = (AddTodoResponse) request.getResponse();
-		if (resp.succeeded())
-			return Integer.parseInt(resp.getResponseContent());
-		else
-			return -1;
-	}
-
-	public Todo getTodo(AuthToken auth, int id) throws ToodledoApiException {
-		Todo filter = new Todo();
-		filter.setId(id);
-		List<Todo> res = getTodosList(auth,filter);
-		if (res != null && res.size() > 0) {
-			return res.get(0);
-		} else {
-			return null;
-		}
-	}
-
-	public List<Todo> getTodosList(AuthToken auth) throws ToodledoApiException {
-		return getTodosList(auth,null);
-	}
-	
-	public List<Todo> getTodosList(AuthToken auth, Todo filter) throws ToodledoApiException {
-		Request getTodosRequest = new GetTodosRequest(auth, filter);
-		GetTodosResponse response = (GetTodosResponse)getTodosRequest.getResponse();
-		if (response.succeeded())
-			return new GetTodosParser(response.getXmlResponseContent()).getTodos();
-		else
-			return null;
-	}
-	
-	public AuthToken initialize(String username, String password, String appId, String appToken) throws ToodledoApiException {
-		Request initReq = new AuthorizeRequest(username,appId,appToken);
-		// response gives back the token, now create the AuthToken
-		AuthorizeResponse resp = (AuthorizeResponse) initReq.getResponse();
-		AuthToken token = new AuthToken(password, username, resp.getResponseContent());
-		return token;
-	}
-
-	public AuthToken initialize(String username, String password, String appToken) throws ToodledoApiException {
-		return initialize(username,password,null, appToken);
-	}
-
-	public boolean modifyTodo(AuthToken auth, Todo newOne)  throws ToodledoApiException{
-		ModifyTodoRequest modifyRequest = new ModifyTodoRequest(auth,newOne);
-		ModifyTodoResponse resp = (ModifyTodoResponse)modifyRequest.getResponse();
-		if (resp.succeeded()) {
-			Integer _t = Integer.parseInt(resp.getResponseContent());
-			if (_t == 1) return true;
-			else return false;
-		} else
-			return false;
-	}
-
-	public boolean deleteTodo(AuthToken auth, int id)  throws ToodledoApiException{
-		DeleteTodoRequest request = new DeleteTodoRequest(auth, id);
-		GenericDeleteResponse resp = (GenericDeleteResponse)request.getResponse();
-		if (resp.succeeded()) {
-			Integer _t = Integer.parseInt(resp.getResponseContent());
-			if (_t == 1) return true;
-			else return false;
-		} else
-			return false;
-	}
-
-	
-	public List<Context> getContexts(AuthToken auth)  throws ToodledoApiException{
-		GetContextsRequest request = new GetContextsRequest(auth);
-		GetContextsResponse resp = (GetContextsResponse)request.getResponse();
-		if (resp.succeeded())
-			return new ContextsParser(resp.getXmlResponseContent()).getContexts();
-		else
-			return null;
-	}
-
-	public List<Folder> getFolders(AuthToken auth)  throws ToodledoApiException{
-		GetFoldersRequest request = new GetFoldersRequest(auth);
-		GetFoldersResponse resp = (GetFoldersResponse)request.getResponse();
-		if (resp.succeeded())
-			return new FolderParser(resp.getXmlResponseContent()).getFolders();
-		else
-			return null;
-	}
-
-	public List<Goal> getGoals(AuthToken auth)  throws ToodledoApiException{
-		GetGoalsRequest request = new GetGoalsRequest(auth);
-		GetGoalsResponse resp = (GetGoalsResponse)request.getResponse();
-		if (resp.succeeded())
-			return new GoalsParser(resp.getXmlResponseContent()).getGoals();
-		else
-			return null;
-	}
-
-	public int addFolder(AuthToken auth, Folder fold)
-			throws ToodledoApiException {
-		AddFolderRequest request = new AddFolderRequest(auth,fold);
-		AddFolderResponse response = (AddFolderResponse)request.getResponse();
-		if (response.succeeded())
-			return Integer.parseInt(response.getResponseContent());
-		else
-			return -1;
-	}
-
-	public int addContext(AuthToken auth, Context context)
-			throws ToodledoApiException {
-		AddContextRequest request = new AddContextRequest(auth, context);
-		AddContextResponse response = (AddContextResponse)request.getResponse();
-		if (response.succeeded())
-			return Integer.parseInt(response.getResponseContent());
-		else
-			return -1;
-	}
-
-	public int addGoal(AuthToken auth, Goal goal) throws ToodledoApiException {
-		AddGoalRequest request = new AddGoalRequest(auth, goal);
-		AddGoalResponse response = (AddGoalResponse)request.getResponse();
-		if (response.succeeded())
-			return Integer.parseInt(response.getResponseContent());
-		else
-			return -1;
-	}
-
-	public String getUserId(String mail, String password)
-			throws ToodledoApiException, IncorrectUserPasswordException, MissingPasswordException {
-				
-		GetUserIdRequest request = new GetUserIdRequest(mail,password);
-		GetUserIdResponse response = (GetUserIdResponse)request.getResponse();
-		if(response.succeeded()) 
-			return new GetUserIdParser(response.getXmlResponseContent()).getUserId();
-		else
-			return null;
-	}
-
-	public boolean deleteFolder(AuthToken auth, int folderId)
-			throws ToodledoApiException {
-		DeleteFolderRequest request = new DeleteFolderRequest(auth, folderId);
-		GenericDeleteResponse resp = (GenericDeleteResponse)request.getResponse();
-		if (resp.succeeded()) {
-			Integer _t = Integer.parseInt(resp.getResponseContent());
-			if (_t == 1) return true;
-			else return false;
-		} else
-			return false;
-		
-	}
-
+    
+    public int addTodo(AuthToken auth, Todo todo) throws ToodledoApiException {
+        AddTodoRequest request = new AddTodoRequest(auth, todo);
+        AddTodoResponse resp = (AddTodoResponse) request.getResponse();
+        if (resp.succeeded())
+            return Integer.parseInt(resp.getResponseContent());
+        else
+            return -1;
+    }
+    
+    public int addTodo(String key, Todo todo) throws ToodledoApiException {
+        
+        AddTodoRequest request = new AddTodoRequest(key, todo);
+        AddTodoResponse resp = (AddTodoResponse) request.getResponse();
+        if (resp.succeeded())
+            return Integer.parseInt(resp.getResponseContent());
+        else
+            return -1;
+    }
+    
+    public Todo getTodo(AuthToken auth, int id) throws ToodledoApiException {
+        Todo filter = new Todo();
+        filter.setId(id);
+        List<Todo> res = getTodosList(auth, filter);
+        if (res != null && res.size() > 0) {
+            return res.get(0);
+        } else {
+            return null;
+        }
+    }
+    
+    public List<Todo> getTodosList(AuthToken auth) throws ToodledoApiException {
+        return getTodosList(auth, null);
+    }
+    
+    public List<Todo> getTodosList(AuthToken auth, Todo filter) throws ToodledoApiException {
+        Request getTodosRequest = new GetTodosRequest(auth, filter);
+        GetTodosResponse response = (GetTodosResponse) getTodosRequest.getResponse();
+        if (response.succeeded())
+            return new GetTodosParser(response.getXmlResponseContent()).getTodos();
+        else
+            return null;
+    }
+    
+    public AuthToken initialize(String userId, String password, String appId, String appToken)
+            throws ToodledoApiException {
+        Request initReq = new AuthorizeRequest(userId, appId, appToken);
+        // response gives back the token, now create the AuthToken
+        AuthorizeResponse resp = (AuthorizeResponse) initReq.getResponse();
+        AuthToken token = new AuthToken(password, userId, appToken, resp.getResponseContent());
+        return token;
+    }
+    
+    @Deprecated
+    public AuthToken initialize(String username, String password, String appToken)
+            throws ToodledoApiException {
+        return initialize(username, password, null, appToken);
+    }
+    
+    public boolean modifyTodo(AuthToken auth, Todo newOne) throws ToodledoApiException {
+        ModifyTodoRequest modifyRequest = new ModifyTodoRequest(auth, newOne);
+        ModifyTodoResponse resp = (ModifyTodoResponse) modifyRequest.getResponse();
+        if (resp.succeeded()) {
+            Integer _t = Integer.parseInt(resp.getResponseContent());
+            if (_t == 1)
+                return true;
+            else
+                return false;
+        } else
+            return false;
+    }
+    
+    public boolean deleteTodo(AuthToken auth, int id) throws ToodledoApiException {
+        DeleteTodoRequest request = new DeleteTodoRequest(auth, id);
+        GenericDeleteResponse resp = (GenericDeleteResponse) request.getResponse();
+        if (resp.succeeded()) {
+            Integer _t = Integer.parseInt(resp.getResponseContent());
+            if (_t == 1)
+                return true;
+            else
+                return false;
+        } else
+            return false;
+    }
+    
+    public List<Context> getContexts(AuthToken auth) throws ToodledoApiException {
+        GetContextsRequest request = new GetContextsRequest(auth);
+        GetContextsResponse resp = (GetContextsResponse) request.getResponse();
+        if (resp.succeeded())
+            return new ContextsParser(resp.getXmlResponseContent()).getContexts();
+        else
+            return null;
+    }
+    
+    public List<Folder> getFolders(AuthToken auth) throws ToodledoApiException {
+        GetFoldersRequest request = new GetFoldersRequest(auth);
+        GetFoldersResponse resp = (GetFoldersResponse) request.getResponse();
+        if (resp.succeeded())
+            return new FolderParser(resp.getXmlResponseContent()).getFolders();
+        else
+            return null;
+    }
+    
+    public List<Goal> getGoals(AuthToken auth) throws ToodledoApiException {
+        GetGoalsRequest request = new GetGoalsRequest(auth);
+        GetGoalsResponse resp = (GetGoalsResponse) request.getResponse();
+        if (resp.succeeded())
+            return new GoalsParser(resp.getXmlResponseContent()).getGoals();
+        else
+            return null;
+    }
+    
+    public int addFolder(AuthToken auth, Folder fold) throws ToodledoApiException {
+        AddFolderRequest request = new AddFolderRequest(auth, fold);
+        AddFolderResponse response = (AddFolderResponse) request.getResponse();
+        if (response.succeeded())
+            return Integer.parseInt(response.getResponseContent());
+        else
+            return -1;
+    }
+    
+    public int addContext(AuthToken auth, Context context) throws ToodledoApiException {
+        AddContextRequest request = new AddContextRequest(auth, context);
+        AddContextResponse response = (AddContextResponse) request.getResponse();
+        if (response.succeeded())
+            return Integer.parseInt(response.getResponseContent());
+        else
+            return -1;
+    }
+    
+    public int addGoal(AuthToken auth, Goal goal) throws ToodledoApiException {
+        AddGoalRequest request = new AddGoalRequest(auth, goal);
+        AddGoalResponse response = (AddGoalResponse) request.getResponse();
+        if (response.succeeded())
+            return Integer.parseInt(response.getResponseContent());
+        else
+            return -1;
+    }
+    
+    public String getUserId(String mail, String password) throws ToodledoApiException,
+            IncorrectUserPasswordException, MissingPasswordException {
+        
+        GetUserIdRequest request = new GetUserIdRequest(mail, password);
+        GetUserIdResponse response = (GetUserIdResponse) request.getResponse();
+        if (response.succeeded())
+            return new GetUserIdParser(response.getXmlResponseContent()).getUserId();
+        else
+            return null;
+    }
+    
+    public boolean deleteFolder(AuthToken auth, int folderId) throws ToodledoApiException {
+        DeleteFolderRequest request = new DeleteFolderRequest(auth, folderId);
+        GenericDeleteResponse resp = (GenericDeleteResponse) request.getResponse();
+        if (resp.succeeded()) {
+            Integer _t = Integer.parseInt(resp.getResponseContent());
+            if (_t == 1)
+                return true;
+            else
+                return false;
+        } else
+            return false;
+        
+    }
+    
 }

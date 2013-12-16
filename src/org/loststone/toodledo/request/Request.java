@@ -13,6 +13,7 @@ public abstract class Request {
 	// url to the service
 	protected String url = null; 
 	protected String jsonResponse = null; 
+	protected String xmlResponse = null; 
 	
 	/**
 	 * Should execute the exec method and give back an appropiate response type. 

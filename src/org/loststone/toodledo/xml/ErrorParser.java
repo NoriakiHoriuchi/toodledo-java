@@ -1,11 +1,8 @@
 package org.loststone.toodledo.xml;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import me.gizio.toodledo4j.json.TdError;
+import net.arnx.jsonic.JSON;
+import net.arnx.jsonic.JSONException;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -14,12 +11,15 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ErrorParser extends DefaultHandler {
 
 	String xml; 
+	String json; 
 	StringBuilder tempVal;
+//	String error = null;
 	String error = null;
 	int depth = 0;
 	
-	public ErrorParser(String xml) {
-		this.xml = xml;
+	public ErrorParser(String json) {
+//		this.xml = xml;
+		this.json=json;
 	}
 	
 	/**
@@ -28,21 +28,12 @@ public class ErrorParser extends DefaultHandler {
 	 * @return the error or null if no error
 	 */
 	public String getError() {
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		try {
-			//get a new instance of parser
-			SAXParser sp = spf.newSAXParser();
-			//parse the string and also register this class for call backs
-			sp.parse(new ByteArrayInputStream(xml.getBytes("UTF-8")), this);
-
-		}catch(SAXException se) {
-			se.printStackTrace();
-		}catch(ParserConfigurationException pce) {
-			pce.printStackTrace();
-		}catch (IOException ie) {
-			ie.printStackTrace();
-		}
-		
+	try{
+	    TdError te = JSON.decode(json, TdError.class);
+	    error=te.getErrorDesc();
+	}catch (JSONException e){
+	    // Do Nothing and then error will stay null.
+	}
 		return error;
 	}
 	
