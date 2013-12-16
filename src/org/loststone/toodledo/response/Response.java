@@ -28,7 +28,7 @@ public abstract class Response {
 	 * @return
 	 * @throws ToodledoApiException
 	 */
-	public String getXmlResponseContent() throws ToodledoApiException {
+	public String getJsonResponseContent() throws ToodledoApiException {
 		return this.response;
 	}
 

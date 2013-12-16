@@ -25,7 +25,7 @@ public interface ToodledoApi {
 	 * to use the web service. It expires after 4 hours.
 	 * @throws ToodledoApiException
 	 */
-	AuthToken initialize(String username, String password) throws ToodledoApiException;
+	AuthToken initialize(String username, String password, String appToken) throws ToodledoApiException;
 	
 	/**
 	 * This method authenticates a user and tells toodledo that's using a given application.
@@ -36,7 +36,7 @@ public interface ToodledoApi {
 	 * to use the web service. It expires after 4 hours.
 	 * @throws ToodledoApiException
 	 */
-	AuthToken initialize(String username, String password, String appid) throws ToodledoApiException;
+	AuthToken initialize(String username, String password, String appid, String appToken) throws ToodledoApiException;
 	
 	/**
 	 * Adds a Todo ( a task ) to toodledo.

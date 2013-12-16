@@ -12,7 +12,7 @@ public abstract class Request {
 	private String authToken = null;
 	// url to the service
 	protected String url = null; 
-	protected String xmlResponse = null; 
+	protected String jsonResponse = null; 
 	
 	/**
 	 * Should execute the exec method and give back an appropiate response type. 
@@ -29,7 +29,7 @@ public abstract class Request {
 		HttpMethod method = new GetMethod(this.url);
 		try {
 			client.executeMethod(method);
-			this.xmlResponse = method.getResponseBodyAsString();
+			this.jsonResponse = method.getResponseBodyAsString();
 		} catch (HttpException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
